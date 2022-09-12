@@ -118,13 +118,16 @@ function getTimeRemaining(endtime) {
     
 
     modalTrigger.forEach(btn => {
-        btn.addEventListener('click', () => {
-            modal.classList.toggle('show');
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        });
+        btn.addEventListener('click', openModal);
     });
     
+    function openModal() {
+        modal.classList.toggle('show');
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimerID);
+    }
+
     function closeModal () {
         modal.classList.toggle('show');
         modal.style.display = 'none';
@@ -145,5 +148,17 @@ function getTimeRemaining(endtime) {
                 closeModal();
             }
         });
+
+        const modalTimerID = setTimeout(openModal, 5000);
+
+        function showModalByScroll() {
+            if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight -1) {
+            openModal();
+            window.removeEventListener('scroll', showModalByScroll);
+            }
+        }
+
+        window.addEventListener('scroll', showModalByScroll);
+
 
 });
